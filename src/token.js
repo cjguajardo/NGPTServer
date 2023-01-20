@@ -1,4 +1,8 @@
+const exceptions = ['/'];
+
 const check = (req) => {
+  if (exceptions.includes(req.path)) return true;
+
   // get the token from the header if present
   const token = (
     req.headers['x-access-token'] ||

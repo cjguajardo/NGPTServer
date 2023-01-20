@@ -1,23 +1,31 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const multer = require('multer'); // v1.0.5
-const upload = multer(); // for parsing multipart/form-data
 const app = express();
+
+const logger = require('./logger');
 const checkToken = require('./token');
-
-const AUTH_TOKEN = process.env.AUTH_TOKEN;
-
 const oai = require('./openai');
+
+var router = express.Router();
+
+router.use(function (req, res, next) {
+  console.log(`${req.method}\t ${req.url}`, req.body);
+  if (!checkToken(req)) {
+    const response = { error: 'Invalid token.' };
+    logger.log(req, response);
+    return res.json(response);
+  }
+
+  if (req.url !== '/log') logger.log(req);
+
+  next();
+});
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(router);
 
-app.post('/ask2IA', upload.array(), async (req, res, next) => {
-  //from req get text={string}
-  //return {id: string, type: string, text: string}
-
-  if (!checkToken(req)) return res.json({ error: 'Invalid token.' });
-
+app.post('/ask', async (req, res) => {
   try {
     const {
       model,
@@ -28,7 +36,6 @@ app.post('/ask2IA', upload.array(), async (req, res, next) => {
       frequency_penalty,
       presence_penalty,
       stop,
-      logprobs,
     } = req.body;
 
     const options = {};
@@ -43,7 +50,6 @@ app.post('/ask2IA', upload.array(), async (req, res, next) => {
     if (presence_penalty)
       options.presence_penalty = parseFloat(presence_penalty);
     if (stop) options.stop = stop;
-    if (logprobs) options.logprobs = parseInt(logprobs);
 
     if (!options.prompt) throw new Error('Prompt is required.');
     if (options.prompt.length < 10)
@@ -63,16 +69,12 @@ app.post('/ask2IA', upload.array(), async (req, res, next) => {
   }
 });
 
-app.get('/getCfg', (req, res, next) => {
-  if (!checkToken(req)) return res.json({ error: 'Invalid token.' });
+app.get('/cfg', (req, res) => {
   try {
-    const { PORT, APP_NAME, OPENAI_API_KEY, OPENAI_ORGANIZATION, AUTH_TOKEN } =
-      process.env;
+    const { PORT, APP_NAME, AUTH_TOKEN } = process.env;
     res.json({
       PORT,
       APP_NAME,
-      OPENAI_API_KEY,
-      OPENAI_ORGANIZATION,
       AUTH_TOKEN,
     });
   } catch (e) {
@@ -81,8 +83,13 @@ app.get('/getCfg', (req, res, next) => {
   }
 });
 
-app.get('/', (req, res, next) => {
-  res.json({ message: 'Hello World!' });
+app.get('/', (req, res) => {
+  res.send('Hello World!' + process.env.APP_NAME);
+});
+
+app.get('/log', (req, res) => {
+  const log = logger.getLog();
+  res.json(log);
 });
 
 app.listen(3000, () => {

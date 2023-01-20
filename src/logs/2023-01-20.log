@@ -1,0 +1,6 @@
+
+2023-01-20T19:36:31.935Z		GET		/cfg		
+2023-01-20T19:36:34.936Z		POST		/ask		{"prompt":"crea un poema relacionado con el verano","temperature":"0.8","max_tokens":"230"}
+2023-01-20T19:36:52.765Z		GET		/		
+2023-01-20T19:38:19.603Z		GET		/cfg		
+2023-01-20T19:38:44.292Z		POST		/ask		{"prompt":"crea un poema relacionado con el verano","temperature":"0.8","max_tokens":"230"}		{"error":"Invalid token."}
