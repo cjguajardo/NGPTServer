@@ -1,0 +1,11 @@
+FROM node:18
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y bash
+RUN npm install -g npm@latest
+
+expose 3000
+
+# start express server (server.js)
+CMD ["npm", "run", "start"]
