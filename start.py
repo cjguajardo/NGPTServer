@@ -72,7 +72,7 @@ def run_dev():
     print(cmd)
     os.system(cmd)
 
-    cmd = f"docker run -p {port}:3000 -v $PWD/src/:/app/ --rm --env-file .env --name {app_name} {app_name}:latest"
+    cmd = f"docker run -d -p {port}:3000 -v $PWD/src/:/app/ --rm --env-file .env --name {app_name} {app_name}:latest"
     cmd = cmd.strip()
     print(cmd)
     os.system(cmd)
