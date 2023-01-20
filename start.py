@@ -41,6 +41,10 @@ def read_env_file():
 
             env_config[key] = value
 
+    # if AUTH_TOKEN is not set, generate using generate_token.py
+    if "AUTH_TOKEN" not in env_config:
+        os.system("python3 generate_token.py")
+
     return env_config
 
 
