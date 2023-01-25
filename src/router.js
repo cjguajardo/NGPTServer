@@ -41,27 +41,13 @@ router.post('/ask', async (req, res, next) => {
   }
 });
 
-router.get('/cfg', (req, res) => {
-  try {
-    const { PORT, APP_NAME, AUTH_TOKEN } = process.env;
-    res.json({
-      PORT,
-      APP_NAME,
-      AUTH_TOKEN,
-    });
-  } catch (e) {
-    console.log(e);
-    res.json({ error: e });
-  }
-});
-
 router.get('/log', (req, res) => {
   const log = logger.getLog();
   res.json(log);
 });
 
 router.get('/', (req, res) => {
-  res.send('Hello World!' + process.env.APP_NAME);
+  res.send('Hello World! ' + process.env.APP_NAME);
 });
 
 module.exports = router;
