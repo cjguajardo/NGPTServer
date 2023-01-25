@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const app = express();
 
 const logger = require('./logger');
@@ -25,36 +26,14 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(router);
 
-app.post('/ask', async (req, res) => {
+app.post('/ask', async (req, res, next) => {
+  const options = oai.parseOptions(req.body);
+
+  if (!options.prompt) throw new Error('Prompt is required.');
+  if (options.prompt.length < 10)
+    throw new Error('Prompt must be at least 10 characters long.');
+
   try {
-    const {
-      model,
-      prompt,
-      temperature,
-      max_tokens,
-      top_p,
-      frequency_penalty,
-      presence_penalty,
-      stop,
-    } = req.body;
-
-    const options = {};
-
-    if (model) options.model = model;
-    if (prompt) options.prompt = prompt;
-    if (temperature) options.temperature = parseFloat(temperature);
-    if (max_tokens) options.max_tokens = parseInt(max_tokens);
-    if (top_p) options.top_p = parseInt(top_p);
-    if (frequency_penalty)
-      options.frequency_penalty = parseFloat(frequency_penalty);
-    if (presence_penalty)
-      options.presence_penalty = parseFloat(presence_penalty);
-    if (stop) options.stop = stop;
-
-    if (!options.prompt) throw new Error('Prompt is required.');
-    if (options.prompt.length < 10)
-      throw new Error('Prompt must be at least 10 characters long.');
-
     const answer = await oai.getAnswer(options);
 
     console.log({ options, answer });
@@ -64,8 +43,8 @@ app.post('/ask', async (req, res) => {
 
     res.json({ answer });
   } catch (e) {
-    console.log(e);
-    res.json({ error: e });
+    console.error(e);
+    next(e);
   }
 });
 
