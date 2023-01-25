@@ -3,3 +3,8 @@
 2023-01-25T11:57:11.289Z		POST		/ask		{"prompt":"crea un poema relacionado con el verano","temperature":"0.8","max_tokens":"230"}
 2023-01-25T11:57:45.861Z		POST		/ask		{"prompt":"crea un poema relacionado con el verano","temperature":"0.8","max_tokens":"230"}
 2023-01-25T11:59:21.630Z		POST		/ask		{"prompt":"reflexiona sobre la vida de una mosca","temperature":"0.8","max_tokens":"230"}
+2023-01-25T12:34:57.852Z		GET		/cfg				{"error":"Invalid token."}
+2023-01-25T12:35:09.293Z		GET		/cfg		
+2023-01-25T12:35:18.004Z		GET		/		
+2023-01-25T12:35:35.741Z		POST		/ask		{"prompt":"saluda","temperature":0.8,"max_tokens":10}
+2023-01-25T12:36:58.047Z		POST		/ask		{"prompt":"saluda en italiano","temperature":0.8,"max_tokens":10}
