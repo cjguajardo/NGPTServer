@@ -6,20 +6,26 @@ const checkToken = require('./token');
 const oai = require('./openai');
 
 // middleware that is specific to this router
-router.use((req, res, next) => {
-  console.log(`${req.method}\t ${req.url}`, req.body);
+// router.use((req, res, next) => {
+//   console.log(`${req.method}\t ${req.url}`, req.body);
+//   if (!checkToken(req)) {
+//     const response = { error: 'Invalid token.' };
+//     logger.log(req, response);
+//     return res.json(response);
+//   }
+
+//   if (req.url !== '/log') logger.log(req);
+
+//   next();
+// });
+
+router.post('/ask', async (req, res, next) => {
   if (!checkToken(req)) {
     const response = { error: 'Invalid token.' };
     logger.log(req, response);
     return res.json(response);
   }
 
-  if (req.url !== '/log') logger.log(req);
-
-  next();
-});
-
-router.post('/ask', async (req, res, next) => {
   const options = oai.parseOptions(req.body);
 
   if (!options.prompt) res.json({ error: 'No prompt provided.' });
