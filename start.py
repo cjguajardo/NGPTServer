@@ -6,23 +6,30 @@ import importlib
 
 
 def install_dependencies():
+  # Check if rich and desktop-notifier modules are installed
+  try:
+      import rich
+      import desktop_notifier
+  except ImportError:
+      # Try to install using pip or pip3
+      try:
+          subprocess.run(["pip", "install", "rich", "desktop-notifier"])
+      except:
+          subprocess.run(["pip3", "install", "rich", "desktop-notifier"])
+      # Import the modules again
+      import rich
+      import desktop_notifier
 
-    modules = ["rich", "desktop-notifier"]
-    for module in modules:
-        try:
-            importlib.import_module(module)
-        except ImportError:
-            print(f"{module} not found, installing...")
-            subprocess.run(["pip", "install", module])
-        else:
-            print(f"{module} found")
+  # Print a message to indicate that the modules are installed
+  print("Modules are installed!")
 
-    os.system("clear")
+  os.system("clear")
 
 
 install_dependencies()
 
 # usage:
+# python start.py [dev|prod] [--no-detach]
 # python start.py dev
 # python start.py prod
 
@@ -32,7 +39,7 @@ def read_env_file():
     # if .env file does not exist, create it
     if not os.path.exists(".env"):
         with open(".env", "w") as f:
-            f.write("PORT=5000\n")
+            f.write("PORT=3000\n")
             f.write("APP_NAME=ngpt-ms\n")
             f.write("OPENAI_API_KEY=\n")
             f.write("OPENAI_ORGANIZATION=\n")

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>API Docs</title>
+  </head>
+  <body class="text-gray-700">
+    <div class="px-4 py-2 m-2 rounded-lg bg-white">
+      <h1 class="text-2xl font-medium">API Docs</h1>
+      <p>
+        This API allows for generating answers to prompts using the OpenAI API
+        and provides endpoints for logging requests and getting the app name.
+      </p>
+      <h2 class="text-xl font-medium">Routes</h2>
+      <div class="px-4 py-2 m-2 rounded-lg bg-gray-200">
+        <h3 class="text-lg font-medium">/ask (POST)</h3>
+        <p>
+          Handles a POST request to the '/ask' route. Parses options from the
+          body, checks for a valid prompt, and uses the OpenAI API to generate
+          an answer.
+        </p>
+        <ul>
+          <p class="font-medium">Available options:</p>
+          <li>
+            model {string} - The model to use for generating the answer prompt
+          </li>
+          <li>
+            {string} - The prompt to use for generating the answer temperature
+          </li>
+          <li>{number} - The temperature to use for generating the answer</li>
+          <li>
+            max_tokens {number} - The maximum number of tokens to use for
+            generating the answer
+          </li>
+          <li>
+            top_p {number} - The top_p value to use for generating the answer
+          </li>
+          <li>
+            frequency_penalty {number} - The frequency_penalty value to use for
+            generating the answer
+          </li>
+          <li>
+            presence_penalty {number} - The presence_penalty value to use for
+            generating the answer
+          </li>
+          <li>
+            stop {string} - The stop string to use for generating the answer
+          </li>
+        </ul>
+      </div>
+      <div class="px-4 py-2 m-2 rounded-lg bg-gray-200">
+        <h3 class="text-lg font-medium">/log (GET)</h3>
+        <p>Endpoint for retrieving the log from the logger module.</p>
+      </div>
+      <div class="px-4 py-2 m-2 rounded-lg bg-gray-200">
+        <h3 class="text-lg font-medium">/ (GET)</h3>
+        <p>
+          Endpoint for retrieving a greeting message along with the app name
+          from the environment variable.
+        </p>
+      </div>
+      <h2 class="text-xl font-medium">Middleware</h2>
+      <p>
+        All routes go through a middleware function that logs the request
+        method, URL, and body, and checks for a valid token.
+      </p>
+    </div>
+  </body>
+</html>
