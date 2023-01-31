@@ -13,7 +13,10 @@ const log = (req, res = null) => {
     fs.writeFileSync(logFile, '');
   }
 
-  fs.appendFileSync(logFile, `\n${date.toISOString()}\t\t`);
+  const ipAddress =
+    req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+  fs.appendFileSync(logFile, `\n${date.toISOString()}\t\t${ipAddress}\t\t`);
   // append request to log file
   fs.appendFileSync(logFile, `${req.method}\t\t${req.url}\t\t`);
   // if has body, append body to log file
@@ -41,6 +44,7 @@ const getLog = () => {
       const [date, method, url, body, response] = line.split('\t\t');
       return {
         date,
+        ip,
         method,
         url,
         body: body ? JSON.parse(body) : null,

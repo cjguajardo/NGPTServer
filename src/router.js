@@ -76,6 +76,21 @@ router.post('/ask', async (req, res, next) => {
   }
 });
 
+router.post('/image', async (req, res, next) => {
+  const options = oai.parseImageOptions(req.body);
+
+  if (options.error) return res.json({ error: options.error });
+
+  try {
+    const image = await oai.getImage(options);
+    if (!image) throw new Error('No image found.');
+    return res.json({ image });
+  } catch (e) {
+    console.error(e);
+    return next(e);
+  }
+});
+
 /**
  *
  * @function

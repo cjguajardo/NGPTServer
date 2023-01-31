@@ -19,6 +19,15 @@ const getAnswer = async (options = {}) => {
   return response.data.choices;
 };
 
+const getImage = async (options = {}) => {
+  const openai = new OpenAIApi(configuration);
+  const response = await openai.createImage({
+    ...options,
+  });
+
+  return response.data;
+};
+
 const parseOptions = (body = {}) => {
   const options = {};
   const {
@@ -45,4 +54,23 @@ const parseOptions = (body = {}) => {
   return options;
 };
 
-module.exports = { getAnswer, parseOptions };
+const parseImageOptions = (body = {}) => {
+  const options = {};
+  const { prompt, size, response_format, user } = body;
+
+  if (prompt) options.prompt = prompt;
+  if (size) options.size = size;
+  if (response_format) options.response_format = response_format;
+  if (user) options.user = user;
+
+  if (options.prompt && options.prompt.length < 10)
+    return { error: 'Prompt must be at least 10 characters long.' };
+  if (['256x256', '512x512', '1024x1024'].indexOf(options.size) === -1)
+    return { error: 'Size must be 256x256, 512x512, or 1024x1024.' };
+  if (['url', 'b64_json'].indexOf(options.response_format) === -1)
+    return { error: 'Response format must be url or b64_json.' };
+
+  return options;
+};
+
+module.exports = { getAnswer, getImage, parseOptions, parseImageOptions };
