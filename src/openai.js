@@ -39,6 +39,7 @@ const parseOptions = (body = {}) => {
     frequency_penalty,
     presence_penalty,
     stop,
+    n,
   } = body;
 
   if (model) options.model = model;
@@ -50,6 +51,7 @@ const parseOptions = (body = {}) => {
     options.frequency_penalty = parseFloat(frequency_penalty);
   if (presence_penalty) options.presence_penalty = parseFloat(presence_penalty);
   if (stop) options.stop = stop;
+  if (n) options.n = parseInt(n);
 
   return options;
 };
