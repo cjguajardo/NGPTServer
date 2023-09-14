@@ -1,4 +1,4 @@
-## README
+## NGPTServer
 
 The start.py script is used to start a development or production environment for an app using Docker.
 
